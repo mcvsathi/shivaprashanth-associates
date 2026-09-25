@@ -1,35 +1,39 @@
 <div class="contact-page">
   <div class="page-header">
     <div class="container">
-      <h1 class="page-title animate-fade-in">Contact Us</h1>
-      <p class="page-subtitle animate-fade-in">Get in touch with our experts in Bangalore for all your audit and taxation needs.</p>
+      <h1 class="page-title animate-fade-in">Consult Now & Contact Us</h1>
+      <p class="page-subtitle animate-fade-in">
+        Connect with our senior chartered accountants and advisors in Bangalore for audit, taxation, and business
+        compliance.
+      </p>
     </div>
   </div>
 
   <section class="contact-section-main">
     <div class="container">
       <div class="contact-grid">
-        
+
         <div class="contact-info bg-primary">
           <h2>Contact Information</h2>
-          <p>Fill out the form and our team will get back to you within 24 hours.</p>
-          
+          <p>Fill out the consultation form and our advisory team will respond within 24 hours.</p>
+
           <div class="info-item">
             <span class="icon">📍</span>
             <div>
               <h3>Office Address</h3>
-              <p>123 Business Avenue, Tech Park,<br>Bangalore, Karnataka 560001, India</p>
+              <p>389, Kusuma Nilaya, Khatha No.389/389 ,<br>9th main road Jayanagar housing society
+                layout,<br>Gubbalala, JHBCSLayout, Bengaluru, Karnataka 560061, India</p>
             </div>
           </div>
-          
+
           <div class="info-item">
             <span class="icon">📞</span>
             <div>
               <h3>Phone</h3>
-              <p>+91 98765 43210<br>+91 80 1234 5678</p>
+              <p>+91 99160 49199</p>
             </div>
           </div>
-          
+
           <div class="info-item">
             <span class="icon">✉️</span>
             <div>
@@ -37,46 +41,148 @@
               <p>contact@shivaprashanth.com</p>
             </div>
           </div>
+
+          <div class="info-item">
+            <span class="icon">⏰</span>
+            <div>
+              <h3>Consultation Hours</h3>
+              <p>Monday – Saturday: 9:30 AM – 6:30 PM<br>Sunday: Closed</p>
+            </div>
+          </div>
         </div>
 
         <div class="contact-form-container bg-white">
-          <h2>Send us a Message</h2>
-          <form class="contact-form">
-            <div class="form-group">
-              <label for="name">Full Name</label>
-              <input type="text" id="name" placeholder="John Doe" required>
+
+          <!-- Success State -->
+          @if (submitSuccess()) {
+          <div class="submission-success animate-fade-in">
+            <div class="success-icon-badge">✓</div>
+            <h2>Consultation Request Received!</h2>
+            <p class="success-lead">
+              Thank you for contacting <strong>ShivaPrashanth & Associates</strong>. Our senior audit and tax
+              consultants have received your details and will get in touch with you shortly.
+            </p>
+
+            <div class="reference-box">
+              <span class="reference-label">Your Inquiry Reference ID</span>
+              <span class="reference-code">{{ referenceId() }}</span>
             </div>
-            
+
+            @if (isMock()) {
+            <div class="dev-notice">
+              <span class="dev-tag">Developer Note</span>
+              <p>
+                This submission was handled in simulation mode. To connect directly to your live database, add your
+                Supabase credentials in <code>src/environments/environment.ts</code>.
+              </p>
+            </div>
+            }
+
+            <button type="button" class="btn btn-outline" (click)="resetStatus()">
+              Schedule Another Consultation
+            </button>
+          </div>
+          } @else {
+          <h2>Schedule a Consultation</h2>
+          <p class="form-intro">
+            Please provide your business or individual details below. All inquiries are held in strict legal and
+            professional confidentiality.
+          </p>
+
+          @if (submitError()) {
+          <div class="alert alert-danger animate-fade-in" role="alert">
+            <span class="alert-icon">⚠️</span>
+            <span>{{ submitError() }}</span>
+          </div>
+          }
+
+          <form [formGroup]="consultationForm" (ngSubmit)="onSubmit()" class="contact-form" novalidate>
+            <div class="form-group" [class.has-error]="isFieldInvalid('name')">
+              <label for="name">Full Name <span class="required-star">*</span></label>
+              <input type="text" id="name" formControlName="name" placeholder="e.g. Rajesh Kumar" autocomplete="name">
+              @if (isFieldInvalid('name')) {
+              <span class="form-feedback">
+                @if (f['name'].errors?.['required']) {
+                Full name is required.
+                } @else if (f['name'].errors?.['minlength']) {
+                Name must be at least 2 characters.
+                }
+              </span>
+              }
+            </div>
+
             <div class="form-row">
-              <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" placeholder="john@example.com" required>
+              <div class="form-group" [class.has-error]="isFieldInvalid('email')">
+                <label for="email">Email Address <span class="required-star">*</span></label>
+                <input type="email" id="email" formControlName="email" placeholder="rajesh@company.com"
+                  autocomplete="email">
+                @if (isFieldInvalid('email')) {
+                <span class="form-feedback">
+                  Please enter a valid email address.
+                </span>
+                }
               </div>
-              <div class="form-group">
+
+              <div class="form-group" [class.has-error]="isFieldInvalid('phone')">
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" placeholder="+91 9876543210">
+                <input type="tel" id="phone" formControlName="phone" placeholder="+91 98765 43210" autocomplete="tel">
+                @if (isFieldInvalid('phone')) {
+                <span class="form-feedback">
+                  Please enter a valid phone number.
+                </span>
+                }
               </div>
             </div>
-            
-            <div class="form-group">
-              <label for="service">Service Required</label>
-              <select id="service" required>
-                <option value="">Select a service</option>
-                <option value="tax">Indian Taxation</option>
-                <option value="fssai">FSSAI Registration</option>
-                <option value="gst">GST Registration & Filing</option>
-                <option value="audit">Audit & Assurance</option>
-                <option value="other">Other Inquiry</option>
+
+            <div class="form-group" [class.has-error]="isFieldInvalid('service')">
+              <label for="service">Service Required <span class="required-star">*</span></label>
+              <select id="service" formControlName="service">
+                <option value="" disabled>Select a consultation domain</option>
+                <option value="tax">Direct & Indian Taxation</option>
+                <option value="gst">GST Advisory & Compliance Filing</option>
+                <option value="fssai">FSSAI Food Licensing & Compliance</option>
+                <option value="audit">Statutory & Internal Audit Assurance</option>
+                <option value="incorporation">Company & LLP Incorporation</option>
+                <option value="other">General Business Consultation</option>
               </select>
+              @if (isFieldInvalid('service')) {
+              <span class="form-feedback">
+                Please select a service category.
+              </span>
+              }
             </div>
-            
-            <div class="form-group">
-              <label for="message">Message</label>
-              <textarea id="message" rows="4" placeholder="How can we help you?" required></textarea>
+
+            <div class="form-group" [class.has-error]="isFieldInvalid('message')">
+              <label for="message">Consultation Details / Message <span class="required-star">*</span></label>
+              <textarea id="message" formControlName="message" rows="4"
+                placeholder="Briefly describe your requirements or queries (minimum 10 characters)..."></textarea>
+              @if (isFieldInvalid('message')) {
+              <span class="form-feedback">
+                @if (f['message'].errors?.['required']) {
+                Please provide details of your consultation request.
+                } @else if (f['message'].errors?.['minlength']) {
+                Message should be at least 10 characters.
+                }
+              </span>
+              }
             </div>
-            
-            <button type="button" class="btn btn-primary">Submit Request</button>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-submit" [disabled]="isSubmitting()">
+                @if (isSubmitting()) {
+                <span class="spinner" aria-hidden="true"></span>
+                <span>Submitting Request...</span>
+                } @else {
+                <span>Submit Consultation Request</span>
+                }
+              </button>
+              <p class="privacy-note">
+                🔒 Your information is confidential and will never be shared.
+              </p>
+            </div>
           </form>
+          }
+
         </div>
 
       </div>

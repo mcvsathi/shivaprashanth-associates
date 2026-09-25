@@ -56,6 +56,12 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "allowedHosts": [
+              "localhost",
+              "127.0.0.1"
+            ]
+          },
           "configurations": {
             "production": {
               "buildTarget": "angular:build:production"
@@ -86,5 +92,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "1d611709-7fe1-4340-a41b-b27148960889"
   }
 }
